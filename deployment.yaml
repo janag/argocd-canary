@@ -2,9 +2,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: demo-stable
+  name: demo
   labels:
-    app: demo-stable
+    app: demo
 spec:
   strategy:
     canary:
