@@ -30,7 +30,7 @@ spec:
     - name: primary
       route:
         - destination:
-            host: demo
+            host: demo-stable
           weight: 100
         - destination:
             host: demo-canary
