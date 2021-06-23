@@ -2,9 +2,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: demo
+  name: demo-stable
   labels:
-    app: demo
+    app: demo-stable
 spec:
   strategy:
     canary:
@@ -23,7 +23,7 @@ spec:
       - pause:
           duration: "2m"
       canaryService: demo-canary
-      stableService: demo
+      stableService: demo-stable
       trafficRouting:
         istio:
            virtualService: 
@@ -34,16 +34,18 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: demo
+      app: demo-stable
       version: blue
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
       labels:
-        app: demo
+        app: demo-stable
         version: blue
     spec:
       containers:
-      - name: demo
+      - name: demo-stable
         image: argoproj/rollouts-demo:blue
         imagePullPolicy: Always
         ports:
@@ -60,13 +62,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo
+  name: demo-stable
 spec:
   ports:
   - port: 80
     targetPort: 8080
   selector:
-    app: demo
+    app: demo-stable
   type: ClusterIP
 ---
 apiVersion: v1
@@ -78,7 +80,7 @@ spec:
   - port: 80
     targetPort: 8080
   selector:
-    app: demo
+    app: demo-stable
   type: ClusterIP
 ---
 apiVersion: argoproj.io/v1alpha1
